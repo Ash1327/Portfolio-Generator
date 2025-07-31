@@ -1,10 +1,11 @@
 [build]
   base = "client"
-  command = "npm run build"
+  command = "chmod +x build.sh && ./build.sh"
   publish = "build"
 
 [build.environment]
   NODE_VERSION = "18"
+  NODE_OPTIONS = "--openssl-legacy-provider"
 
 [[redirects]]
   from = "/*"
