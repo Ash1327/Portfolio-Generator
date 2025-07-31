@@ -111,7 +111,7 @@ const ProfessionalsList: React.FC = () => {
 
         {/* Search and Filter */}
         <div className="mb-12">
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Search */}
             <div className="relative">
               <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -172,51 +172,51 @@ const ProfessionalsList: React.FC = () => {
             </Link>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {filteredPortfolios.map((portfolio) => (
               <div
                 key={portfolio.id}
                 className="bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden"
               >
                 {/* Portfolio Header */}
-                <div className="p-6">
-                  <div className="flex items-center gap-4 mb-4">
+                <div className="p-4 sm:p-6">
+                  <div className="flex items-center gap-3 sm:gap-4 mb-4">
                     {portfolio.profileImageId ? (
                       <img
                         src={getImageUrl(portfolio.profileImageId) || ''}
                         alt={portfolio.hero.name}
-                        className="w-16 h-16 rounded-full object-cover border-2 border-blue-200"
+                        className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-blue-200 flex-shrink-0"
                       />
                     ) : (
-                      <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                        <FaUser className="text-2xl text-gray-400" />
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
+                        <FaUser className="text-lg sm:text-2xl text-gray-400" />
                       </div>
                     )}
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900">{portfolio.hero.name}</h3>
-                      <p className="text-gray-600">{portfolio.hero.title}</p>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-900 truncate">{portfolio.hero.name}</h3>
+                      <p className="text-sm sm:text-base text-gray-600 truncate">{portfolio.hero.title}</p>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-600 mb-4 line-clamp-3">
+                  <p className="text-sm sm:text-base text-gray-600 mb-4 line-clamp-3">
                     {portfolio.about.description}
                   </p>
 
                   {/* Skills */}
                   <div className="mb-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">Skills:</h4>
-                    <div className="flex flex-wrap gap-2">
+                    <h4 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Skills:</h4>
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
                       {portfolio.skills.slice(0, 3).map((skill, index) => (
                         <span
                           key={index}
-                          className={`px-3 py-1 rounded-full text-sm font-medium ${getSkillColor(skill)}`}
+                          className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${getSkillColor(skill)}`}
                         >
                           {skill}
                         </span>
                       ))}
                       {portfolio.skills.length > 3 && (
-                        <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-600">
+                        <span className="px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-gray-100 text-gray-600">
                           +{portfolio.skills.length - 3} more
                         </span>
                       )}
@@ -225,25 +225,25 @@ const ProfessionalsList: React.FC = () => {
 
                   {/* Projects Count */}
                   <div className="mb-4">
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs sm:text-sm text-gray-500">
                       {portfolio.portfolio.length} project{portfolio.portfolio.length !== 1 ? 's' : ''}
                     </p>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="px-6 pb-6">
-                  <div className="flex gap-3">
+                <div className="px-4 sm:px-6 pb-4 sm:pb-6">
+                  <div className="flex gap-2 sm:gap-3">
                     <Link
                       to={`/portfolio/${portfolio.id}`}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center gap-2"
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 sm:py-3 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-sm sm:text-base"
                     >
                       <FaEye className="text-sm" />
                       View
                     </Link>
                     <button
                       onClick={() => handleDelete(portfolio.id)}
-                      className="px-4 py-3 bg-red-100 hover:bg-red-200 text-red-600 rounded-2xl transition-all duration-300"
+                      className="px-3 sm:px-4 py-2 sm:py-3 bg-red-100 hover:bg-red-200 text-red-600 rounded-2xl transition-all duration-300"
                       title="Delete portfolio"
                     >
                       <FaTrash className="text-sm" />
