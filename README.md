@@ -5,7 +5,7 @@ A dynamic portfolio generator built with React and Node.js that allows users to 
 # Live URL
 LINK : https://rococo-fairy-3bbb27.netlify.app/
 
-Note : After filling all the details in the form and submitting it , please wait for atleast 50-60 sec as it is deployed iin the free server so it may take some time. 
+Note : After filling all the details in the form and submitting it , please wait for atleast 50-60 sec as it is deployed in the free server so it may take some time. 
 
 ## 🚀 Features
 
