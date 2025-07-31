@@ -2,6 +2,11 @@
 
 A dynamic portfolio generator built with React and Node.js that allows users to create professional portfolios by selecting templates and filling out detailed forms.
 
+# Live URL
+LINK : https://rococo-fairy-3bbb27.netlify.app/
+
+Note : After filling all the details in the form and submitting it , please wait for atleast 50-60 sec as it is deployed iin the free server so it may take some time. 
+
 ## 🚀 Features
 
 ### Core Features
@@ -173,7 +178,10 @@ npm start
 
 ## 📸 Screenshots
 
-[Add screenshots here showing the different pages and features]
+<img width="1201" height="890" alt="image" src="https://github.com/user-attachments/assets/b6a22f8d-035a-4c56-b190-26dba2ea980b" />
+<img width="1138" height="870" alt="image" src="https://github.com/user-attachments/assets/57f3accf-c942-400f-964d-97b741669528" />
+
+
 
 ## 🎯 Future Enhancements
 
