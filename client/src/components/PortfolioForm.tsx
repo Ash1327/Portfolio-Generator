@@ -212,6 +212,13 @@ const PortfolioForm: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
+      // Show loading state
+      const submitButton = document.querySelector('button[type="submit"]');
+      if (submitButton) {
+        submitButton.textContent = 'Creating Portfolio...';
+        submitButton.setAttribute('disabled', 'true');
+      }
+
       // Prepare files array for API
       const files: File[] = [];
       
@@ -244,11 +251,33 @@ const PortfolioForm: React.FC = () => {
         template: selectedTemplate?.id || 'modern' // Include template information
       };
 
-      await apiService.createPortfolio(portfolioData, files);
+      console.log('Submitting portfolio data:', portfolioData);
+      console.log('Files to upload:', files.length);
+      
+      const result = await apiService.createPortfolio(portfolioData, files);
+      console.log('Portfolio created successfully:', result);
       navigate('/success');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating portfolio:', error);
-      alert('Error creating portfolio. Please try again.');
+      console.error('Error response:', error.response?.data);
+      console.error('Error status:', error.response?.status);
+      console.error('Error message:', error.message);
+      
+      let errorMessage = 'Error creating portfolio. Please try again.';
+      if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      alert(errorMessage);
+    } finally {
+      // Reset button state
+      const submitButton = document.querySelector('button[type="submit"]');
+      if (submitButton) {
+        submitButton.textContent = 'Create Portfolio';
+        submitButton.removeAttribute('disabled');
+      }
     }
   };
 

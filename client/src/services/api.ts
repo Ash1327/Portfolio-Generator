@@ -13,7 +13,7 @@ export const getImageUrl = (imageId: string | null): string | null => {
 // Create axios instance with default configuration
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 30000, // Increased timeout to 30 seconds
   headers: {
     'Content-Type': 'application/json',
   },
@@ -41,12 +41,21 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     // Handle common errors here
-    if (error.response?.status === 401) {
+    if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+      console.error('Request timeout - server might be slow to respond');
+      return Promise.reject(new Error('Request timeout. The server is taking too long to respond. Please try again.'));
+    } else if (error.response?.status === 401) {
       // Handle unauthorized
       console.error('Unauthorized access');
     } else if (error.response?.status === 500) {
       // Handle server errors
       console.error('Server error occurred');
+    } else if (error.response?.status === 404) {
+      console.error('API endpoint not found');
+    } else if (!error.response) {
+      // Network error
+      console.error('Network error - unable to connect to server');
+      return Promise.reject(new Error('Unable to connect to server. Please check your internet connection.'));
     }
     return Promise.reject(error);
   }
@@ -161,7 +170,7 @@ export interface Portfolio {
     name: string;
     title: string;
     subtitle: string;
-    image?: string;
+    imageId?: string;
   };
   about: {
     description: string;
@@ -180,9 +189,9 @@ export interface Portfolio {
     technologies: string[];
     github?: string;
     live?: string;
-    image?: string;
+    imageId?: string;
   }>;
-  profileImage?: string;
+  profileImageId?: string;
   createdAt: string;
   updatedAt?: string;
 }
@@ -192,7 +201,6 @@ export interface CreatePortfolioData {
     name: string;
     title: string;
     subtitle: string;
-    image?: string;
   };
   about: {
     description: string;
@@ -205,14 +213,32 @@ export interface CreatePortfolioData {
     };
   };
   skills: string[];
+  services: Array<{
+    title: string;
+    description: string;
+  }>;
   portfolio: Array<{
     title: string;
     description: string;
     technologies: string[];
     github?: string;
     live?: string;
-    image?: string;
   }>;
+  testimonials: Array<{
+    name: string;
+    quote: string;
+    position: string;
+  }>;
+  blog: {
+    title: string;
+    summary: string;
+  };
+  contact: {
+    message: string;
+    email: string;
+    phone: string;
+  };
+  template?: string;
 }
 
 export interface ApiResponse<T> {
