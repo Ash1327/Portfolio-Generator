@@ -239,12 +239,27 @@ const PortfolioForm: React.FC = () => {
         hero: {
           name: formData.hero.name,
           title: formData.hero.title,
-          tagline: formData.hero.tagline
+          subtitle: formData.hero.tagline  // Map tagline to subtitle for display
         },
-        about: formData.about,
+        about: {
+          description: formData.about.bio,  // Map bio to description for display
+          socials: {
+            github: formData.about.socials.github,
+            linkedin: formData.about.socials.linkedin,
+            email: formData.about.email,
+            phone: formData.about.phone,
+            location: formData.about.location
+          }
+        },
         skills: formData.skills.filter(skill => skill.trim() !== ''),
         services: formData.services.filter(service => service.title.trim() !== ''),
-        portfolio: formData.portfolio.filter(project => project.title.trim() !== ''),
+        portfolio: formData.portfolio.filter(project => project.title.trim() !== '').map(project => ({
+          title: project.title,
+          description: project.description,
+          technologies: formData.skills.slice(0, 3), // Use first 3 skills as technologies
+          github: '', // Default empty
+          live: '' // Default empty
+        })),
         testimonials: formData.testimonials.filter(testimonial => testimonial.name.trim() !== ''),
         blog: formData.blog,
         contact: formData.contact,
