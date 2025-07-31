@@ -1,6 +1,12 @@
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
-const { portfolioUpload } = require('../middleware/upload');
+const { 
+  portfolioUpload, 
+  storeImageInMemory, 
+  getImageFromMemory, 
+  deleteImageFromMemory,
+  cleanupPortfolioImages 
+} = require('../middleware/upload');
 
 const router = express.Router();
 
@@ -12,30 +18,43 @@ router.get('/', (req, res) => {
   res.json(portfolios);
 });
 
+// GET image by ID
+router.get('/image/:imageId', (req, res) => {
+  const imageData = getImageFromMemory(req.params.imageId);
+  if (imageData) {
+    res.set('Content-Type', imageData.mimetype);
+    res.send(imageData.buffer);
+  } else {
+    res.status(404).json({ error: 'Image not found' });
+  }
+});
+
 // POST create new portfolio
 router.post('/', portfolioUpload, (req, res) => {
   try {
     const portfolioData = JSON.parse(req.body.data);
+    const portfolioId = uuidv4();
     
     // Handle profile image
-    const profileImage = req.files.profileImage ? `/uploads/${req.files.profileImage[0].filename}` : null;
+    const profileImageId = req.files.profileImage ? 
+      storeImageInMemory(req.files.profileImage[0], portfolioId) : null;
     
     // Handle portfolio images
     if (portfolioData.portfolio) {
       portfolioData.portfolio = portfolioData.portfolio.map((project, index) => {
-        const portfolioImage = req.files[`portfolioImage${index}`] ? 
-          `/uploads/${req.files[`portfolioImage${index}`][0].filename}` : null;
+        const portfolioImageId = req.files[`portfolioImage${index}`] ? 
+          storeImageInMemory(req.files[`portfolioImage${index}`][0], portfolioId) : null;
         return {
           ...project,
-          image: portfolioImage
+          imageId: portfolioImageId
         };
       });
     }
     
     const newPortfolio = {
-      id: uuidv4(),
+      id: portfolioId,
       ...portfolioData,
-      profileImage,
+      profileImageId,
       createdAt: new Date().toISOString()
     };
     
@@ -63,22 +82,23 @@ router.put('/:id', portfolioUpload, (req, res) => {
   if (index !== -1) {
     try {
       const portfolioData = JSON.parse(req.body.data);
+      const portfolioId = req.params.id;
       
       // Handle profile image
-      const profileImage = req.files.profileImage ? 
-        `/uploads/${req.files.profileImage[0].filename}` : 
-        portfolios[index].profileImage;
+      const profileImageId = req.files.profileImage ? 
+        storeImageInMemory(req.files.profileImage[0], portfolioId) : 
+        portfolios[index].profileImageId;
       
       // Handle portfolio images
       if (portfolioData.portfolio) {
         portfolioData.portfolio = portfolioData.portfolio.map((project, projectIndex) => {
-          const portfolioImage = req.files[`portfolioImage${projectIndex}`] ? 
-            `/uploads/${req.files[`portfolioImage${projectIndex}`][0].filename}` : 
+          const portfolioImageId = req.files[`portfolioImage${projectIndex}`] ? 
+            storeImageInMemory(req.files[`portfolioImage${projectIndex}`][0], portfolioId) : 
             (portfolios[index].portfolio && portfolios[index].portfolio[projectIndex] ? 
-              portfolios[index].portfolio[projectIndex].image : null);
+              portfolios[index].portfolio[projectIndex].imageId : null);
           return {
             ...project,
-            image: portfolioImage
+            imageId: portfolioImageId
           };
         });
       }
@@ -86,7 +106,7 @@ router.put('/:id', portfolioUpload, (req, res) => {
       const updatedPortfolio = {
         ...portfolios[index],
         ...portfolioData,
-        profileImage,
+        profileImageId,
         updatedAt: new Date().toISOString()
       };
       
@@ -105,6 +125,8 @@ router.put('/:id', portfolioUpload, (req, res) => {
 router.delete('/:id', (req, res) => {
   const index = portfolios.findIndex(p => p.id === req.params.id);
   if (index !== -1) {
+    // Clean up all images for this portfolio
+    cleanupPortfolioImages(req.params.id);
     portfolios.splice(index, 1);
     res.json({ message: 'Portfolio deleted successfully' });
   } else {
