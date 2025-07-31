@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { FaUser, FaEye, FaTrash, FaSearch, FaFilter } from 'react-icons/fa';
+import { FaUser, FaEye, FaTrash, FaSearch } from 'react-icons/fa';
 import { apiService, getImageUrl } from '../services/api';
 import { Portfolio } from '../types';
 
@@ -16,23 +16,7 @@ const ProfessionalsList: React.FC = () => {
     fetchPortfolios();
   }, []);
 
-  useEffect(() => {
-    filterPortfolios();
-  }, [portfolios, searchTerm, filterType, filterValue]);
-
-  const fetchPortfolios = async (): Promise<void> => {
-    try {
-      const data = await apiService.getAllPortfolios();
-      setPortfolios(data);
-      setFilteredPortfolios(data);
-    } catch (error) {
-      console.error('Error fetching portfolios:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filterPortfolios = (): void => {
+  const filterPortfolios = useCallback((): void => {
     let filtered = portfolios;
 
     // Search by name or title
@@ -59,6 +43,22 @@ const ProfessionalsList: React.FC = () => {
     }
 
     setFilteredPortfolios(filtered);
+  }, [portfolios, searchTerm, filterType, filterValue]);
+
+  useEffect(() => {
+    filterPortfolios();
+  }, [filterPortfolios]);
+
+  const fetchPortfolios = async (): Promise<void> => {
+    try {
+      const data = await apiService.getAllPortfolios();
+      setPortfolios(data);
+      setFilteredPortfolios(data);
+    } catch (error) {
+      console.error('Error fetching portfolios:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDelete = async (id: string): Promise<void> => {

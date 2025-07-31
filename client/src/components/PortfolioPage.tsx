@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { FaArrowLeft, FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaMapMarkerAlt, FaStar, FaRocket, FaCrown } from 'react-icons/fa';
+import { FaArrowLeft, FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaMapMarkerAlt, FaStar } from 'react-icons/fa';
 import { apiService, getImageUrl } from '../services/api';
 import { Portfolio } from '../types';
 
@@ -10,13 +10,7 @@ const PortfolioPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (id) {
-      fetchPortfolio();
-    }
-  }, [id]);
-
-  const fetchPortfolio = async (): Promise<void> => {
+  const fetchPortfolio = useCallback(async (): Promise<void> => {
     if (!id) return;
     
     try {
@@ -28,7 +22,13 @@ const PortfolioPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      fetchPortfolio();
+    }
+  }, [id, fetchPortfolio]);
 
   // Determine template type (default to modern if not specified)
   const templateType = portfolio?.template || 'modern';

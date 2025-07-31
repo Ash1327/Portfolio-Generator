@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaEye, FaPalette, FaCode, FaCheck, FaStar, FaRocket, FaCrown } from 'react-icons/fa';
+import React from 'react';
+import { FaRocket, FaCrown, FaStar } from 'react-icons/fa';
 import { Template } from '../types';
 
 const TemplateSelection: React.FC = () => {

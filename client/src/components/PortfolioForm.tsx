@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaUser, FaPlus, FaTrash, FaArrowLeft, FaArrowRight, FaCheck, FaStar, FaQuoteLeft } from 'react-icons/fa';
+import { FaUser, FaPlus, FaTrash, FaArrowLeft, FaArrowRight, FaCheck } from 'react-icons/fa';
 import { apiService } from '../services/api';
 import { Template, FormData, FormStep } from '../types';
 
