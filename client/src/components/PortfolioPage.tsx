@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaArrowLeft, FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaMapMarkerAlt, FaStar, FaRocket, FaCrown } from 'react-icons/fa';
-import { apiService } from '../services/api';
+import { apiService, getImageUrl } from '../services/api';
 import { Portfolio } from '../types';
 
 const PortfolioPage: React.FC = () => {
@@ -170,9 +170,9 @@ const PortfolioPage: React.FC = () => {
             
             {/* Profile Image */}
             <div className="flex justify-center lg:justify-end">
-              {portfolio.profileImage ? (
+              {portfolio.profileImageId ? (
                 <img
-                  src={portfolio.profileImage}
+                  src={getImageUrl(portfolio.profileImageId) || ''}
                   alt={portfolio.hero.name}
                   className="w-80 h-80 rounded-full object-cover border-4 border-white/20 shadow-2xl"
                 />
@@ -252,10 +252,10 @@ const PortfolioPage: React.FC = () => {
                 key={index}
                 className={`${currentTheme.cardBg} rounded-3xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300`}
               >
-                {project.image && (
+                {project.imageId && (
                   <div className="aspect-video overflow-hidden">
                     <img
-                      src={project.image}
+                      src={getImageUrl(project.imageId) || ''}
                       alt={project.title}
                       className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                     />

@@ -1,7 +1,7 @@
 // Environment configuration
 export const config = {
   // API Configuration
-  API_BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:8000',
+  API_BASE_URL: process.env.REACT_APP_API_URL || 'https://portfolio-generator-2-fh5c.onrender.com',
 
   // App Configuration
   APP_NAME: 'PortfolioGen',

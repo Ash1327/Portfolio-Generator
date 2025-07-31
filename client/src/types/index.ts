@@ -120,7 +120,7 @@ export interface Project {
   technologies: string[];
   github?: string;
   live?: string;
-  image?: string;
+  imageId?: string;
 }
 
 // Hero section types
@@ -128,7 +128,7 @@ export interface Hero {
   name: string;
   title: string;
   subtitle: string;
-  image?: string;
+  imageId?: string;
 }
 
 // About section types
@@ -144,7 +144,7 @@ export interface Portfolio {
   about: About;
   skills: string[];
   portfolio: Project[];
-  profileImage?: string;
+  profileImageId?: string;
   template?: 'modern' | 'classic'; // Track which template was used
   createdAt: string;
   updatedAt?: string;

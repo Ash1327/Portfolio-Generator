@@ -4,6 +4,12 @@ import { config } from '../config';
 // API Configuration
 const API_BASE_URL = config.API_BASE_URL;
 
+// Helper function to get image URL from image ID
+export const getImageUrl = (imageId: string | null): string | null => {
+  if (!imageId) return null;
+  return `${API_BASE_URL}/api/portfolios/image/${imageId}`;
+};
+
 // Create axios instance with default configuration
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,

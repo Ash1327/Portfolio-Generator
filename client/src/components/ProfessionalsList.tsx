@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaEye, FaEdit, FaTrash, FaSearch, FaFilter, FaUser } from 'react-icons/fa';
-import { apiService } from '../services/api';
+import { FaUser, FaEye, FaTrash, FaSearch, FaFilter } from 'react-icons/fa';
+import { apiService, getImageUrl } from '../services/api';
 import { Portfolio } from '../types';
 
 const ProfessionalsList: React.FC = () => {
@@ -181,9 +181,9 @@ const ProfessionalsList: React.FC = () => {
                 {/* Portfolio Header */}
                 <div className="p-6">
                   <div className="flex items-center gap-4 mb-4">
-                    {portfolio.profileImage ? (
+                    {portfolio.profileImageId ? (
                       <img
-                        src={portfolio.profileImage}
+                        src={getImageUrl(portfolio.profileImageId) || ''}
                         alt={portfolio.hero.name}
                         className="w-16 h-16 rounded-full object-cover border-2 border-blue-200"
                       />
